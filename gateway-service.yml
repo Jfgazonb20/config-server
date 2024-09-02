@@ -12,6 +12,10 @@ spring:
         uri: lb://checkout-service
         predicates:
           - Path=/checkout
+      - id: products-service
+        uri: lb://products-service
+        predicates:
+          - Path=/products
         filters:
           - AddRequestHeader=X-Request-from, gateway
           - AddResponseHeader=X-Response-Red, Blue
