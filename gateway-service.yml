@@ -5,7 +5,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/dh
+          issuer-uri: http://localhost:8080/realms/dh  # URI del servidor de autenticación
   cloud:
     config:
       discovery:
@@ -15,16 +15,39 @@ spring:
       default-filters:
         - TokenRelay=
       routes:
-        - id: checkout-service
-          uri: lb://checkout-service
+        - id: users-service
+          uri: lb://users-service
           predicates:
-            - Path=/checkout
+            - Path=/users/**
           filters:
             - AddRequestHeader=X-Request-from, gateway
-            - AddResponseHeader=X-Response-Red, Blue
-        - id: products-service
-          uri: lb://products-service
+            - AddResponseHeader=X-Response-Gateway, response-users
+
+        - id: accounts-service
+          uri: lb://accounts-service
           predicates:
-            - Path=/products
+            - Path=/accounts/**
+          filters:
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-accounts
+
+        - id: transactions-service
+          uri: lb://transactions-service
+          predicates:
+            - Path=/transactions/**
+          filters:
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-transactions
+
 server:
   port: 8085
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/  # URL del servidor Eureka
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.security: DEBUG
