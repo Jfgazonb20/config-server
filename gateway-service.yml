@@ -39,6 +39,14 @@ spring:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
+        - id: cards-service
+          uri: lb://cards-service
+          predicates:
+            - Path=/cards/**
+          filters:
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-cards
+
 server:
   port: 8085
 
