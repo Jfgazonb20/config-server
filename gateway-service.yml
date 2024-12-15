@@ -1,16 +1,13 @@
+server:
+  port: 8085
 spring:
   application:
     name: gateway-service
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8080/realms/dh  # URI del servidor de autenticación
   cloud:
     config:
       discovery:
-        serviceId: config-service
         enabled: true
+        serviceId: config-service
     gateway:
       default-filters:
         - TokenRelay=
@@ -47,15 +44,12 @@ spring:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-cards
 
-server:
-  port: 8085
-
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/  # URL del servidor Eureka
-
+      defaultZone: http://localhost:8761/eureka/
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     org.springframework.security: DEBUG
+
