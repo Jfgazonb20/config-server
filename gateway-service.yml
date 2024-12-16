@@ -1,22 +1,27 @@
 server:
   port: 8085
+
 spring:
   application:
     name: gateway-service
+
+  # Configuración del Config Server
   cloud:
     config:
       discovery:
         enabled: true
         serviceId: config-service
+
     gateway:
       default-filters:
-        - TokenRelay=
+        - TokenRelay=  # Permite reenviar el token JWT
       routes:
         - id: users-service
           uri: lb://users-service
           predicates:
             - Path=/users/**
           filters:
+            - TokenRelay=  # Reenvía el token JWT a Users
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-users
 
@@ -25,6 +30,7 @@ spring:
           predicates:
             - Path=/accounts/**
           filters:
+            - TokenRelay=  # Reenvía el token JWT a Accounts
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-accounts
 
@@ -33,6 +39,7 @@ spring:
           predicates:
             - Path=/transactions/**
           filters:
+            - TokenRelay=  # Reenvía el token JWT a Transactions
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
@@ -41,15 +48,25 @@ spring:
           predicates:
             - Path=/cards/**
           filters:
+            - TokenRelay=  # Reenvía el token JWT a Cards
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-cards
 
+  # Configuración de seguridad OAuth2 para validar JWT
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/dh  # Keycloak o tu servidor de autenticación
+
+# Configuración de Eureka
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+# Configuración de logs para debug
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     org.springframework.security: DEBUG
-
