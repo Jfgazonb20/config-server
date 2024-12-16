@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: gateway-service
+    spring:
+  main:
+    allow-bean-definition-overriding: true
 
   # Configuración del Config Server
   cloud:
