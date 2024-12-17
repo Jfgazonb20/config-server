@@ -5,11 +5,12 @@ spring:
   application:
     name: api-gateway
 
+spring:
   cloud:
     gateway:
       routes:
         - id: users-service
-          uri: lb://users-service
+          uri: lb://USERS-SERVICE
           predicates:
             - Path=/api/users/**
 
