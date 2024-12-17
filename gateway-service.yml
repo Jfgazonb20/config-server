@@ -15,6 +15,7 @@ spring:
             - Path=/api/users/**
           filters:
             - StripPrefix=2
+            - Debug=true
 
 eureka:
   client:
