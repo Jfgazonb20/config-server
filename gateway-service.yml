@@ -14,8 +14,8 @@ spring:
           predicates:
             - Path=/api/users/**
           filters:
-            - StripPrefix=2
-            - Debug=true
+            - StripPrefix=2  # Elimina "/api/users" para que quede "/actuator/health"
+
 
 eureka:
   client:
