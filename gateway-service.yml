@@ -5,21 +5,22 @@ spring:
   application:
     name: api-gateway
     
-spring:
   cloud:
     gateway:
       routes:
+        # Rutas específicas para el Actuator del users-service
         - id: users-service-actuator
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/users/actuator/**    # Maneja rutas del actuator
+            - Path=/api/users/actuator/**   # Captura rutas de Actuator
           filters:
             - RewritePath=/api/users/actuator/(?<segment>.*), /actuator/${segment}
 
+        # Rutas generales para el users-service
         - id: users-service
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/users/**             # Maneja otras rutas del microservicio
+            - Path=/api/users/**            # Captura otras rutas del microservicio
           filters:
             - RewritePath=/api/users/(?<segment>.*), /${segment}
 
@@ -34,6 +35,7 @@ logging:
   level:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty: DEBUG
+    org.springframework.web: DEBUG
 
 management:
   endpoints:
@@ -43,4 +45,3 @@ management:
   info:
     env:
       enabled: true
-
