@@ -12,10 +12,9 @@ spring:
         - id: users-service
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/users/**
+            - Path=/api/users/**, /api/users/actuator/**  # Permite pasar la ruta a actuator
           filters:
-            - StripPrefix=2  # Elimina "/api/users" para que quede "/actuator/health"
-            
+            - RewritePath=/api/users/(?<segment>.*), /${segment}  # Reescribe la URL para el servicio destino
 
 
 eureka:
