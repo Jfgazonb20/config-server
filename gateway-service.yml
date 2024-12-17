@@ -5,15 +5,22 @@ spring:
   application:
     name: api-gateway
     
+spring:
   cloud:
     gateway:
       routes:
+        - id: users-service-actuator
+          uri: lb://USERS-SERVICE
+          predicates:
+            - Path=/api/users/actuator/**    # Maneja rutas del actuator
+          filters:
+            - RewritePath=/api/users/actuator/(?<segment>.*), /actuator/${segment}
+
         - id: users-service
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/users/**, /api/users/actuator/**
+            - Path=/api/users/**             # Maneja otras rutas del microservicio
           filters:
-            - RewritePath=/api/users/(?<segment>actuator/.*), /${segment}
             - RewritePath=/api/users/(?<segment>.*), /${segment}
 
 eureka:
