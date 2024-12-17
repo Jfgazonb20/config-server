@@ -5,17 +5,15 @@ spring:
   application:
     name: api-gateway
 
-spring:
   cloud:
     gateway:
       routes:
         - id: users-service
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/users/**, /api/users/actuator/**  # Permite pasar la ruta a actuator
+            - Path=/api/users/**, /api/users/actuator/**
           filters:
-            - RewritePath=/api/users/(?<segment>.*), /${segment}  # Reescribe la URL para el servicio destino
-
+            - RewritePath=/api/users/(?<segment>.*), /${segment}
 
 eureka:
   client:
@@ -29,7 +27,6 @@ logging:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty: DEBUG
 
-
 management:
   endpoints:
     web:
@@ -38,9 +35,4 @@ management:
   info:
     env:
       enabled: true
-
-      logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty: DEBUG
 
