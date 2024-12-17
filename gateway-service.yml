@@ -4,7 +4,7 @@ server:
 spring:
   application:
     name: api-gateway
-
+    
   cloud:
     gateway:
       routes:
@@ -13,6 +13,7 @@ spring:
           predicates:
             - Path=/api/users/**, /api/users/actuator/**
           filters:
+            - RewritePath=/api/users/(?<segment>actuator/.*), /${segment}
             - RewritePath=/api/users/(?<segment>.*), /${segment}
 
 eureka:
