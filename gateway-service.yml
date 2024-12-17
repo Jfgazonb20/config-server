@@ -13,6 +13,8 @@ spring:
           uri: lb://USERS-SERVICE
           predicates:
             - Path=/api/users/**
+          filters:
+            - StripPrefix=2
 
 eureka:
   client:
