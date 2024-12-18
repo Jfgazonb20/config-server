@@ -17,10 +17,18 @@ spring:
             - RewritePath=/api/users/actuator/(?<segment>.*), /actuator/${segment}
 
         # Rutas generales para el users-service
+gateway:
+      default-filters:
+        - TokenRelay=  # Permite reenviar el token JWT
+      routes:
         - id: users-service
-          uri: lb://USERS-SERVICE
+          uri: lb://users-service
           predicates:
-            - Path=/api/users/**            # Captura otras rutas del microservicio
+            - Path=/users/**
+          filters:
+            - TokenRelay=  # Reenvía el token JWT a Users
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-users
 
 eureka:
   client:
