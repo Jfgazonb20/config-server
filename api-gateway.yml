@@ -7,6 +7,8 @@ spring:
     
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay=  # Permite reenviar el token JWT
       routes:
         # Rutas específicas para el Actuator del users-service
         - id: users-service-actuator
@@ -17,16 +19,12 @@ spring:
             - RewritePath=/api/users/actuator/(?<segment>.*), /actuator/${segment}
 
         # Rutas generales para el users-service
-gateway:
-      default-filters:
-        - TokenRelay=  # Permite reenviar el token JWT
-      routes:
         - id: users-service
-          uri: lb://users-service
+          uri: lb://USERS-SERVICE
           predicates:
-            - Path=/users/**
+            - Path=/api/users/**   # Corrige el Path para incluir el prefijo /api
           filters:
-            - TokenRelay=  # Reenvía el token JWT a Users
+            - TokenRelay=  # Reenvía el token JWT
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-users
 
@@ -51,3 +49,4 @@ management:
   info:
     env:
       enabled: true
+
