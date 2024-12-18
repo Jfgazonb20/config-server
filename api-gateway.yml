@@ -25,6 +25,15 @@ spring:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-users
 
+        # Ruta específica para el cards-service
+        - id: cards-service
+          uri: lb://CARDS-SERVICE
+          predicates:
+            - Path=/api/accounts/**  # Rutas específicas de cards-service
+          filters:
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-cards
+
 eureka:
   client:
     service-url:
