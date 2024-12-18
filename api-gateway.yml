@@ -8,6 +8,16 @@ spring:
   cloud:
     gateway:
       routes:
+        # Ruta específica para el cards-service (debe ir primero)
+        - id: cards-service
+          uri: lb://CARDS-SERVICE
+          predicates:
+            - Path=/api/accounts/**  # Rutas específicas de cards-service
+          filters:
+            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-cards
+
         # Ruta específica para el Actuator del users-service
         - id: users-service-actuator
           uri: lb://USERS-SERVICE
@@ -20,20 +30,10 @@ spring:
         - id: users-service
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/**   # Asegura que las rutas como /api/register y /api/login funcionen
+            - Path=/api/**   # Captura las demás rutas bajo /api/
           filters:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-users
-
-        # Ruta específica para el cards-service
-        - id: cards-service
-          uri: lb://CARDS-SERVICE
-          predicates:
-            - Path=/api/accounts/**  # Rutas específicas de cards-service
-          filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
-            - AddRequestHeader=X-Request-from, gateway
-            - AddResponseHeader=X-Response-Gateway, response-cards
 
 eureka:
   client:
