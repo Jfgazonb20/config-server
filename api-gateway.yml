@@ -8,19 +8,11 @@ spring:
   cloud:
     gateway:
       routes:
-        # Rutas específicas para el Actuator del users-service
-        - id: users-service-actuator
-          uri: lb://USERS-SERVICE
-          predicates:
-            - Path=/api/users/actuator/**   # Captura rutas de Actuator
-          filters:
-            - RewritePath=/api/users/actuator/(?<segment>.*), /actuator/${segment}
-
-        # Rutas generales para el users-service
+        # Ruta general para enrutar todas las solicitudes de /api/** al users-service
         - id: users-service
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/users/**   # Corrige el Path para incluir el prefijo /api
+            - Path=/api/**   # Captura cualquier ruta con el prefijo /api
           filters:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-users
@@ -38,11 +30,3 @@ logging:
     reactor.netty: DEBUG
     org.springframework.web: DEBUG
 
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info
-  info:
-    env:
-      enabled: true
