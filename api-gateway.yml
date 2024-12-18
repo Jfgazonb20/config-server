@@ -29,7 +29,7 @@ spring:
         - id: cards-service
           uri: lb://CARDS-SERVICE
           predicates:
-            - Path=/api/accounts/**/cards/**  # Captura rutas para tarjetas
+            - Path=/api/accounts/{accountId}/cards/**  # Captura rutas dinámicas correctamente
           filters:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-cards
@@ -46,4 +46,3 @@ logging:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty: DEBUG
     org.springframework.web: DEBUG
-
