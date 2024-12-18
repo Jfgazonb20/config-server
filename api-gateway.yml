@@ -1,5 +1,5 @@
 server:
-  port: 8080  # Puerto para el API Gateway
+  port: 8080
 
 spring:
   application:
@@ -20,19 +20,10 @@ spring:
         - id: users-service
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/users/**   # Ruta general para los endpoints de users-service
+            - Path=/api/**   # Asegura que las rutas como /api/register y /api/login funcionen
           filters:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-users
-
-        # Ruta específica para el Cards Service
-        - id: cards-service
-          uri: lb://CARDS-SERVICE
-          predicates:
-            - Path=/api/accounts/{accountId}/cards/**  # Captura rutas dinámicas correctamente
-          filters:
-            - AddRequestHeader=X-Request-from, gateway
-            - AddResponseHeader=X-Response-Gateway, response-cards
 
 eureka:
   client:
