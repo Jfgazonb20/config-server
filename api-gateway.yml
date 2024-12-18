@@ -4,15 +4,23 @@ server:
 spring:
   application:
     name: api-gateway
-    
+
   cloud:
     gateway:
       routes:
-        # Ruta general para enrutar todas las solicitudes de /api/** al users-service
+        # Ruta específica para el Actuator del users-service
+        - id: users-service-actuator
+          uri: lb://USERS-SERVICE
+          predicates:
+            - Path=/api/users/actuator/**  # Captura rutas específicas de Actuator
+          filters:
+            - RewritePath=/api/users/actuator/(?<segment>.*), /actuator/${segment}
+
+        # Ruta general para el users-service
         - id: users-service
           uri: lb://USERS-SERVICE
           predicates:
-            - Path=/api/**   # Captura cualquier ruta con el prefijo /api
+            - Path=/api/**   # Asegura que las rutas como /api/register y /api/login funcionen
           filters:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-users
@@ -29,4 +37,3 @@ logging:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty: DEBUG
     org.springframework.web: DEBUG
-
