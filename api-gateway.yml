@@ -23,10 +23,6 @@ spring:
           uri: lb://USERS-SERVICE
           predicates:
             - Path=/api/users/**   # Corrige el Path para incluir el prefijo /api
-          filters:
-            - TokenRelay=  # Reenvía el token JWT
-            - AddRequestHeader=X-Request-from, gateway
-            - AddResponseHeader=X-Response-Gateway, response-users
 
 eureka:
   client:
