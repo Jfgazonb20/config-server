@@ -24,7 +24,7 @@ spring:
           predicates:
             - Path=/api/accounts/*/activity/**  # Patrón explícito para "activity"
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
+            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
@@ -33,7 +33,7 @@ spring:
           predicates:
             - Path=/api/accounts/*/transferences/**  # Patrón explícito para "transferences"
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
+            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
@@ -42,7 +42,7 @@ spring:
           predicates:
             - Path=/api/accounts/*/balance/**  # Patrón explícito para "balance"
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
+            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
