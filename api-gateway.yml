@@ -8,7 +8,7 @@ spring:
   cloud:
     gateway:
       routes:
-        # Ruta específica para el cards-service
+        # Ruta para manejar cuentas en el cards-service
         - id: cards-service
           uri: lb://CARDS-SERVICE
           predicates:
@@ -48,7 +48,17 @@ spring:
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
-        # Ruta para registrar ingresos (transferences)
+        # Ruta para registrar ingresos (POST /income)
+        - id: transactions-service-income
+          uri: lb://TRANSACTIONS-SERVICE
+          predicates:
+            - Path=/api/transactions/accounts/{id}/income/**
+          filters:
+            - RewritePath=/api/transactions/accounts/(?<segment>.*), /api/transactions/accounts/${segment}
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-transactions
+
+        # Ruta para transferencias de dinero (GET y POST /transferences)
         - id: transactions-service-transferences
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
