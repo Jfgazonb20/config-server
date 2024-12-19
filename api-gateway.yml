@@ -19,30 +19,12 @@ spring:
             - AddResponseHeader=X-Response-Gateway, response-cards
 
         # Rutas específicas para el transactions-service
-        - id: transactions-service-activity
+        - id: transactions-service
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/*/activity/**  # Patrón explícito para "activity"
+            - Path=/api/transactions/accounts/**  # Prefijo único para transactions-service
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
-            - AddRequestHeader=X-Request-from, gateway
-            - AddResponseHeader=X-Response-Gateway, response-transactions
-
-        - id: transactions-service-transferences
-          uri: lb://TRANSACTIONS-SERVICE
-          predicates:
-            - Path=/api/accounts/*/transferences/**  # Patrón explícito para "transferences"
-          filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
-            - AddRequestHeader=X-Request-from, gateway
-            - AddResponseHeader=X-Response-Gateway, response-transactions
-
-        - id: transactions-service-balance
-          uri: lb://TRANSACTIONS-SERVICE
-          predicates:
-            - Path=/api/accounts/*/balance/**  # Patrón explícito para "balance"
-          filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
+            - RewritePath=/api/transactions/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
