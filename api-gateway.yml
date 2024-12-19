@@ -12,9 +12,9 @@ spring:
         - id: cards-service
           uri: lb://CARDS-SERVICE
           predicates:
-            - Path=/api/accounts/**  # Rutas específicas de cards-service
+            - Path=/api/accounts/cards/**  # Hacer esta ruta más específica
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
+            - RewritePath=/api/accounts/cards/(?<segment>.*), /api/accounts/cards/${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-cards
 
