@@ -8,7 +8,7 @@ spring:
   cloud:
     gateway:
       routes:
-        # Ruta específica para el cards-service (debe ir primero)
+        # Ruta específica para el cards-service
         - id: cards-service
           uri: lb://CARDS-SERVICE
           predicates:
@@ -22,7 +22,7 @@ spring:
         - id: transactions-service
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/*/activity/**, /api/accounts/*/transferences/**, /api/accounts/*/balance/**  # Rutas específicas de transactions-service incluyendo saldo disponible
+            - Path=/api/accounts/**/activity/**, /api/accounts/**/transferences/**, /api/accounts/**/balance/**  # Rutas específicas de transactions-service
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
             - AddRequestHeader=X-Request-from, gateway
