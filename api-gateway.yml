@@ -8,21 +8,11 @@ spring:
   cloud:
     gateway:
       routes:
-        # Ruta específica para el cards-service
-        - id: cards-service
-          uri: lb://CARDS-SERVICE
-          predicates:
-            - Path=/api/cards/**  # Hacer esta ruta específica para tarjetas
-          filters:
-            - RewritePath=/api/cards/(?<segment>.*), /${segment}
-            - AddRequestHeader=X-Request-from, gateway
-            - AddResponseHeader=X-Response-Gateway, response-cards
-
         # Rutas específicas para el transactions-service
         - id: transactions-service-activity
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/{id}/activity/**  # Coincide con tu controlador
+            - Path=/api/accounts/{id}/activity/**  # Rutas específicas para actividades
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
@@ -31,7 +21,7 @@ spring:
         - id: transactions-service-transferences
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/{id}/transferences/**  # Coincide con tu controlador
+            - Path=/api/accounts/{id}/transferences/**  # Rutas específicas para transferencias
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
@@ -40,11 +30,21 @@ spring:
         - id: transactions-service-balance
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/{id}/balance/**  # Coincide con tu controlador
+            - Path=/api/accounts/{id}/balance/**  # Rutas específicas para balance
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
+
+        # Rutas específicas para el cards-service
+        - id: cards-service
+          uri: lb://CARDS-SERVICE
+          predicates:
+            - Path=/api/accounts/**  # Rutas generales para cuentas en el servicio de tarjetas
+          filters:
+            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-cards
 
         # Ruta específica para el Actuator del users-service
         - id: users-service-actuator
