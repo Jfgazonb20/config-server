@@ -12,19 +12,37 @@ spring:
         - id: cards-service
           uri: lb://CARDS-SERVICE
           predicates:
-            - Path=/api/cards/**  # Evitar conflictos con transactions-service
+            - Path=/api/accounts/**  # Rutas específicas de cards-service
           filters:
-            - RewritePath=/api/cards/(?<segment>.*), /api/cards/${segment}
+            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-cards
 
         # Rutas específicas para el transactions-service
-        - id: transactions-service
+        - id: transactions-service-activity
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/transactions/accounts/**  # Asegurarse de que esto coincida con el prefijo en el controlador
+            - Path=/api/transactions/accounts/*/activity/**  # Patrón explícito para "activity"
           filters:
-            - RewritePath=/api/transactions/accounts/(?<segment>.*), /api/transactions/accounts/${segment}
+            - RewritePath=/api/transactions/accounts/(?<segment>.*), /${segment}
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-transactions
+
+        - id: transactions-service-transferences
+          uri: lb://TRANSACTIONS-SERVICE
+          predicates:
+            - Path=/api/transactions/accounts/*/transferences/**  # Patrón explícito para "transferences"
+          filters:
+            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
+            - AddRequestHeader=X-Request-from, gateway
+            - AddResponseHeader=X-Response-Gateway, response-transactions
+
+        - id: transactions-service-balance
+          uri: lb://TRANSACTIONS-SERVICE
+          predicates:
+            - Path=/api/accounts/*/balance/**  # Patrón explícito para "balance"
+          filters:
+            - RewritePath=/api/transactions/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
