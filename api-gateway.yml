@@ -12,35 +12,35 @@ spring:
         - id: cards-service
           uri: lb://CARDS-SERVICE
           predicates:
-            - Path=/api/accounts/cards/**  # Hacer esta ruta más específica
+            - Path=/api/accounts/**  # Rutas específicas de cards-service
           filters:
-            - RewritePath=/api/accounts/cards/(?<segment>.*), /api/accounts/cards/${segment}
+            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-cards
 
         # Rutas específicas para el transactions-service
-        - id: transactions-service-activity-route
+        - id: transactions-service-activity
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/{id}/activity/**  # Coincide con tu controlador
+            - Path=/api/accounts/*/activity/**  # Patrón explícito para "activity"
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
-        - id: transactions-service-transferences-route
+        - id: transactions-service-transferences
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/{id}/transferences/**  # Coincide con tu controlador
+            - Path=/api/accounts/*/transferences/**  # Patrón explícito para "transferences"
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
-        - id: transactions-service-balance-route
+        - id: transactions-service-balance
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/{id}/balance/**  # Coincide con tu controlador
+            - Path=/api/accounts/*/balance/**  # Patrón explícito para "balance"
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
