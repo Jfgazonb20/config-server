@@ -12,9 +12,9 @@ spring:
         - id: cards-service
           uri: lb://CARDS-SERVICE
           predicates:
-            - Path=/api/accounts/**  # Rutas específicas de cards-service
+            - Path=/api/accounts/cards/**  # Ajustar para evitar conflictos con transactions
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /api/accounts/${segment}
+            - RewritePath=/api/accounts/cards/(?<segment>.*), /api/accounts/cards/${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-cards
 
@@ -22,7 +22,7 @@ spring:
         - id: transactions-service
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/transactions/accounts/**  # Prefijo único para transactions-service
+            - Path=/api/transactions/accounts/**  # Prefijo único para evitar conflictos
           filters:
             - RewritePath=/api/transactions/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
@@ -57,3 +57,4 @@ logging:
     org.springframework.cloud.gateway: DEBUG
     reactor.netty: DEBUG
     org.springframework.web: DEBUG
+
