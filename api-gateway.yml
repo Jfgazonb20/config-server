@@ -22,16 +22,16 @@ spring:
         - id: transactions-service-activity
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/*/activity/**  # Patrón explícito para "activity"
+            - Path=/api/transactions/accounts/*/activity/**  # Patrón explícito para "activity"
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
+            - RewritePath=/api/transactions/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
         - id: transactions-service-transferences
           uri: lb://TRANSACTIONS-SERVICE
           predicates:
-            - Path=/api/accounts/*/transferences/**  # Patrón explícito para "transferences"
+            - Path=/api/transactions/accounts/*/transferences/**  # Patrón explícito para "transferences"
           filters:
             - RewritePath=/api/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
@@ -42,7 +42,7 @@ spring:
           predicates:
             - Path=/api/accounts/*/balance/**  # Patrón explícito para "balance"
           filters:
-            - RewritePath=/api/accounts/(?<segment>.*), /${segment}
+            - RewritePath=/api/transactions/accounts/(?<segment>.*), /${segment}
             - AddRequestHeader=X-Request-from, gateway
             - AddResponseHeader=X-Response-Gateway, response-transactions
 
