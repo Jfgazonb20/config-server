@@ -1,1 +1,25 @@
+# Nombre del servicio
+spring.application.name=Task-Service
+
+# Configuración de la base de datos
+spring.datasource.url=jdbc:postgresql://localhost:5432/lgtask
+spring.datasource.username=postgres
+spring.datasource.password=root
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+# Configuración JPA
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+# Puerto del microservicio
+server.port=8081
+
+# JWT Configuración
+jwt.secret=mySuperSecretKeyForJwtSigningMustBeLongEnough12345
+
+# Actuator y Endpoints
+management.endpoints.web.exposure.include=health,info
+management.info.env.enabled=true
+management.endpoint.health.show-details=always
 
